@@ -3,6 +3,7 @@ import { getRandomEmptyCellLocation, getInitialBoard, maybeMoveTiles } from '@/u
 import { v4 as uuidv4 } from 'uuid'
 import Tile from './Tile'
 import { tw } from '@/utils'
+import { directionKeys } from '@/consts' 
 
 function Game() {
   const boardSize = 4
@@ -57,14 +58,19 @@ function Game() {
     reset()
 
     const handleMove = (e) => {
+
+      if (!directionKeys.includes(e.key)) return
+
       setBoard((prevBoard) => {
         let newBoard = maybeMoveTiles(prevBoard, e.key)
 
         const { x, y } = getRandomEmptyCellLocation(newBoard)
         newBoard[x][y] = { 
+          x,
+          y,
           value: 2, 
           id: uuidv4(),
-          classes: ['scale-in'], 
+          classes: ['not-initial'], 
         }
 
         return newBoard
@@ -92,7 +98,7 @@ function Game() {
         <div
           className={tw(['grid', 'bg-dark-beige'])}
           style={{
-            gridTemplateColumns: `repeat(${boardSize}, 1fr);`,
+            gridTemplateColumns: `repeat(${boardSize}, 1fr)`,
             gap: `${gutterSize}px`,
             padding: `${gutterSize}px`,
             borderRadius: `${borderRadius}px`,
@@ -112,8 +118,8 @@ function Game() {
                 'tw-bg-light-beige',
               ])}
               style={{
-                width: `${cellSize}px;`,
-                height: `${cellSize}px;`,
+                width: `${cellSize}px`,
+                height: `${cellSize}px`,
                 borderRadius: `${borderRadius}px`,
               }}
             />

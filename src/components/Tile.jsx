@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { tw } from '@/utils'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function Tile({ x, y, value, cellSize, gutterSize, boardSize, id, classes = [] }) {
-  console.log(classes)
+  console.log('x', x)
+  console.log('y', y)
 
   return (
-    <div
+    <motion.div
       className={tw(
         [
           'tile',
@@ -16,19 +18,29 @@ function Tile({ x, y, value, cellSize, gutterSize, boardSize, id, classes = [] }
           'justify-center',
           'items-center',
           'font-semibold',
+          'w-[var(--2048-cell-size)]',
+          'h-[var(--2048-cell-size)]',
+          'rounded-[var(--2048-border-radius)]',
         ],
         classes
       )}
       style={{
         fontSize: `${value.toString().length > 2 ? '45px' : '55px'}`,
-        transform: `translateX(${x * cellSize + (x + 1) * gutterSize}px) translateY(${y * cellSize + (y + 1) * gutterSize}px)`,
+      }}
+      initial={{
+        x: x * cellSize + (x + 1) * gutterSize,
+        y: y * cellSize + (y + 1) * gutterSize,
+      }}
+      animate={{
+        x: x * cellSize + (x + 1) * gutterSize,
+        y: y * cellSize + (y + 1) * gutterSize,
       }}
       data-x={x}
       data-y={y}
       data-id={id}
     >
       {value}
-    </div>
+    </motion.div>
   )
 }
 
