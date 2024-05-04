@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Game from '@/components/Game.jsx';
+---
+
+<Layout title="Welcome to Astro.">
+  <div
+    class:list={['h-screen', 'flex', 'flex-col', 'justify-center', 'items-center']}
+  >
+    <Game client:load />
+  </div>
+</Layout>
+
+<style>
+
+</style>
