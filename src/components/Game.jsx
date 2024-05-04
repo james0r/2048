@@ -3,7 +3,10 @@ import { getRandomEmptyCellLocation, getInitialBoard, maybeMoveTiles } from '@/u
 import { v4 as uuidv4 } from 'uuid'
 import Tile from './Tile'
 import { tw } from '@/utils'
-import { directionKeys } from '@/consts' 
+import { directionKeys } from '@/consts'
+
+import Count from '@/components/ui/Count'
+import Button from '@/components/ui/Button'
 
 function Game() {
   const boardSize = 4
@@ -45,7 +48,7 @@ function Game() {
               y,
               value: cell.value,
               id: cell.id,
-              classes: cell.classes
+              classes: cell.classes,
             }
         )
       )
@@ -58,19 +61,18 @@ function Game() {
     reset()
 
     const handleMove = (e) => {
-
       if (!directionKeys.includes(e.key)) return
 
       setBoard((prevBoard) => {
-        let newBoard = maybeMoveTiles(prevBoard, e.key)
+        let newBoard = maybeMoveTiles(prevBoard, e.key, setScore)
 
         const { x, y } = getRandomEmptyCellLocation(newBoard)
-        newBoard[x][y] = { 
+        newBoard[x][y] = {
           x,
           y,
-          value: 2, 
+          value: 2,
           id: uuidv4(),
-          classes: ['not-initial'], 
+          classes: ['not-initial'],
         }
 
         return newBoard
@@ -84,68 +86,88 @@ function Game() {
 
   return (
     <>
-      <button onClick={reset}>Reset</button>
-      <div
-        data-board-container
-        className={tw(['relative'])}
-        style={{
-          '--2048-cell-size': `${cellSize}px`,
-          '--2048-gutter-size': `${gutterSize}px`,
-          '--2048-border-radius': `${borderRadius}px`,
-          '--2048-board-size': `${boardSize}`,
-        }}
-      >
+      <div>
+        <header className={tw(['w-full', 'mb-10'])}>
+          <div className={tw(['flex','justify-between','mb-10'])}>
+            <div className={tw(['text-5xl', 'font-bold', 'text-flint'])}>2048</div>
+            <div className={tw(['flex', 'gap-2'])}>
+              <Count 
+                title={`SCORE`}
+                count={score}
+              />
+              <Count 
+                title={`BEST`}
+                count={1000}
+              />
+            </div>
+          </div>
+          <div className={tw(['flex', 'justify-between'])}>
+            <div></div>
+            <Button onClick={reset}>Reset</Button>
+          </div>
+        </header>
         <div
-          className={tw(['grid', 'bg-dark-beige'])}
+          data-board-container
+          className={tw(['relative'])}
           style={{
-            gridTemplateColumns: `repeat(${boardSize}, 1fr)`,
-            gap: `${gutterSize}px`,
-            padding: `${gutterSize}px`,
-            borderRadius: `${borderRadius}px`,
+            '--2048-cell-size': `${cellSize}px`,
+            '--2048-gutter-size': `${gutterSize}px`,
+            '--2048-border-radius': `${borderRadius}px`,
+            '--2048-board-size': `${boardSize}`,
           }}
         >
-          {Array.from({ length: boardSize * boardSize }).map((_, i) => (
-            <div
-              key={i}
-              className={tw([
-                'bg-light-beige',
-                'flex',
-                'justify-center',
-                'items-center',
-                'text-2xl',
-                'font-bold',
-                'text-flint',
-                'tw-bg-light-beige',
-              ])}
-              style={{
-                width: `${cellSize}px`,
-                height: `${cellSize}px`,
-                borderRadius: `${borderRadius}px`,
-              }}
-            />
-          ))}
-        </div>
-        <div
-          data-pieces-overlay
-          className={tw(['w-full', 'h-full', 'absolute', 'top-0', 'left-0'])}
-        >
-          {flattenedBoard.map(
-            (tile) =>
-              tile && (
-                <Tile
-                  key={tile.id}
-                  classes={tile.classes}
-                  x={tile.x}
-                  y={tile.y}
-                  value={tile.value}
-                  cellSize={cellSize}
-                  borderRadius={borderRadius}
-                  gutterSize={gutterSize}
-                  boardSize={boardSize}
-                  id={tile.id}
-                />
-              )
-          )}
+          <div
+            className={tw(['grid', 'bg-dark-beige'])}
+            style={{
+              gridTemplateColumns: `repeat(${boardSize}, 1fr)`,
+              gap: `${gutterSize}px`,
+              padding: `${gutterSize}px`,
+              borderRadius: `${borderRadius}px`,
+            }}
+          >
+            {Array.from({ length: boardSize * boardSize }).map((_, i) => (
+              <div
+                key={i}
+                className={tw([
+                  'bg-light-beige',
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'text-2xl',
+                  'font-bold',
+                  'text-flint',
+                  'tw-bg-light-beige',
+                ])}
+                style={{
+                  width: `${cellSize}px`,
+                  height: `${cellSize}px`,
+                  borderRadius: `${borderRadius}px`,
+                }}
+              />
+            ))}
+          </div>
+          <div
+            data-pieces-overlay
+            className={tw(['w-full', 'h-full', 'absolute', 'top-0', 'left-0'])}
+          >
+            {flattenedBoard.map(
+              (tile) =>
+                tile && (
+                  <Tile
+                    key={tile.id}
+                    classes={tile.classes}
+                    x={tile.x}
+                    y={tile.y}
+                    value={tile.value}
+                    cellSize={cellSize}
+                    borderRadius={borderRadius}
+                    gutterSize={gutterSize}
+                    boardSize={boardSize}
+                    id={tile.id}
+                  />
+                )
+            )}
+          </div>
         </div>
       </div>
     </>
