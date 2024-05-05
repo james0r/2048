@@ -9,7 +9,7 @@ function Tile({ x, y, prevX, prevY, value, cellSize, gutterSize, boardSize, id, 
     console.log('prevX', prevX)
     console.log('prevY', prevY)
     setAnimationKey(prevKey => prevKey + 1);
-  }, [prevX, prevY])
+  }, [prevX, prevY, x, y, value, cellSize, gutterSize, boardSize, id, classes])
 
   return (
     <motion.div
