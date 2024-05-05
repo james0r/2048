@@ -6,15 +6,16 @@ function Count({ title, count }) {
   const controls = useAnimation()
 
   useEffect(() => {
-    // Animate to the new value
-    controls.start({
-      scale: [1, 1.5, 1],
-      transition: {
-        duration: 1,
-        ease: 'easeInOut',
-        loop: Infinity,
-      },
-    })
+    if (count > 0) {
+      controls.start({
+        scale: [1, 1.5, 1],
+        transition: {
+          duration: 1,
+          ease: 'easeInOut',
+          loop: Infinity,
+        },
+      })
+    }
   }, [count, controls])
 
   return (

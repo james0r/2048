@@ -35,8 +35,9 @@ export const maybeMoveTiles = (board, direction, setScore) => {
             newBoard[x][currentY] = null;
             currentY--;
           }
-          if (currentY > 0 && newBoard[x][currentY - 1] !== null && newBoard[x][currentY - 1].value === newBoard[x][currentY].value) {
+          if (currentY > 0 && newBoard[x][currentY - 1] !== null && newBoard[x][currentY - 1].value === newBoard[x][currentY].value && !newBoard[x][currentY - 1].merged) {
             setScore((prev) => prev + (newBoard[x][currentY - 1].value *= 2))
+            newBoard[x][currentY - 1].merged = true;
             newBoard[x][currentY] = null;
           }
         }
@@ -54,8 +55,9 @@ export const maybeMoveTiles = (board, direction, setScore) => {
             newBoard[x][currentY] = null;
             currentY++;
           }
-          if (currentY < newBoard.length - 1 && newBoard[x][currentY + 1] !== null && newBoard[x][currentY + 1].value === newBoard[x][currentY].value) {
+          if (currentY < newBoard.length - 1 && newBoard[x][currentY + 1] !== null && newBoard[x][currentY + 1].value === newBoard[x][currentY].value && !newBoard[x][currentY + 1].merged) {
             setScore((prev) => prev + (newBoard[x][currentY + 1].value *= 2))
+            newBoard[x][currentY + 1].merged = true;
             newBoard[x][currentY] = null;
           }
         }
@@ -73,8 +75,9 @@ export const maybeMoveTiles = (board, direction, setScore) => {
             newBoard[currentX][y] = null;
             currentX--;
           }
-          if (currentX > 0 && newBoard[currentX - 1][y] !== null && newBoard[currentX - 1][y].value === newBoard[currentX][y].value) {
+          if (currentX > 0 && newBoard[currentX - 1][y] !== null && newBoard[currentX - 1][y].value === newBoard[currentX][y].value && !newBoard[currentX - 1][y].merged) {
             setScore((prev) => prev + (newBoard[currentX - 1][y].value *= 2))
+            newBoard[currentX - 1][y].merged = true;
             newBoard[currentX][y] = null;
           }
         }
@@ -92,8 +95,9 @@ export const maybeMoveTiles = (board, direction, setScore) => {
             newBoard[currentX][y] = null;
             currentX++;
           }
-          if (currentX < newBoard.length - 1 && newBoard[currentX + 1][y] !== null && newBoard[currentX + 1][y].value === newBoard[currentX][y].value) {
+          if (currentX < newBoard.length - 1 && newBoard[currentX + 1][y] !== null && newBoard[currentX + 1][y].value === newBoard[currentX][y].value && !newBoard[currentX + 1][y].merged) {
             setScore((prev) => prev + (newBoard[currentX + 1][y].value *= 2))
+            newBoard[currentX + 1][y].merged = true;
             newBoard[currentX][y] = null;
           }
         }
@@ -101,7 +105,13 @@ export const maybeMoveTiles = (board, direction, setScore) => {
     }
   }
 
-  console.log('newBoard', newBoard)
+  for (let x = 0; x < newBoard.length; x++) {
+    for (let y = 0; y < newBoard.length; y++) {
+      if (newBoard[x][y] !== null) {
+        newBoard[x][y].merged = false;
+      }
+    }
+  }
 
   return newBoard
 }
