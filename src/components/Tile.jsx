@@ -1,25 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { tw } from '@/utils'
-import { motion, AnimatePresence, animate } from 'framer-motion'
+import { motion, useAnimationControls } from 'framer-motion'
 
-function Tile({ x, y, value, cellSize, gutterSize, boardSize, id, classes = [] }) {
-  const framerProps = {
-    initial: {
-      x: x * cellSize + (x + 1) * gutterSize,
-      y: y * cellSize + (y + 1) * gutterSize,
-      backgroundColor: 'var(--color-bush)',
-      color: 'var(--color-flint)'
-    },
-    animate: {
-      x: x * cellSize + (x + 1) * gutterSize,
-      y: y * cellSize + (y + 1) * gutterSize,
-      backgroundColor: backgroundColorResolver(value),
-      color: textColorResolver(value)
-    },
-  }
+function Tile({ x, y, prevX, prevY, value, cellSize, gutterSize, boardSize, id, classes = [] }) {
+  const [animationKey, setAnimationKey] = useState(0);
+
+  useEffect(() => {
+    console.log('prevX', prevX)
+    console.log('prevY', prevY)
+    setAnimationKey(prevKey => prevKey + 1);
+  }, [prevX, prevY])
 
   return (
     <motion.div
+      key={animationKey} // Unique key to trigger re-animation
+      variants={{
+        initial: {
+          x: prevX
+            ? prevX * cellSize + (prevX + 1) * gutterSize
+            : x * cellSize + (x + 1) * gutterSize,
+          y: prevY
+            ? prevY * cellSize + (prevY + 1) * gutterSize
+            : y * cellSize + (y + 1) * gutterSize,
+          backgroundColor: 'var(--color-bush)',
+          color: 'var(--color-flint)',
+        },
+        final: {
+          x: x * cellSize + (x + 1) * gutterSize,
+          y: y * cellSize + (y + 1) * gutterSize,
+          backgroundColor: backgroundColorResolver(value),
+          color: textColorResolver(value),
+        },
+      }}
+      initial="initial"
+      animate="final"
+      transition={{ duration: 0.5 }}
       className={tw(
         [
           'tile',
@@ -38,7 +53,6 @@ function Tile({ x, y, value, cellSize, gutterSize, boardSize, id, classes = [] }
       style={{
         fontSize: `${value.toString().length > 2 ? '45px' : '55px'}`,
       }}
-      {...framerProps}
       data-x={x}
       data-y={y}
       data-id={id}

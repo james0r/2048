@@ -32,12 +32,16 @@ export const maybeMoveTiles = (board, direction, setScore) => {
           let currentY = y;
           while (currentY > 0 && newBoard[x][currentY - 1] === null) {
             newBoard[x][currentY - 1] = newBoard[x][currentY];
+            newBoard[x][currentY].prevX = x; // Save previous X position
+            newBoard[x][currentY].prevY = currentY; // Save previous Y position
             newBoard[x][currentY] = null;
             currentY--;
           }
           if (currentY > 0 && newBoard[x][currentY - 1] !== null && newBoard[x][currentY - 1].value === newBoard[x][currentY].value && !newBoard[x][currentY - 1].merged) {
             setScore((prev) => prev + (newBoard[x][currentY - 1].value *= 2))
             newBoard[x][currentY - 1].merged = true;
+            newBoard[x][currentY].prevX = x; // Save previous X position
+            newBoard[x][currentY].prevY = currentY; // Save previous Y position
             newBoard[x][currentY] = null;
           }
         }
@@ -52,12 +56,16 @@ export const maybeMoveTiles = (board, direction, setScore) => {
           let currentY = y;
           while (currentY < newBoard.length - 1 && newBoard[x][currentY + 1] === null) {
             newBoard[x][currentY + 1] = newBoard[x][currentY];
+            newBoard[x][currentY].prevX = x; // Save previous X position
+            newBoard[x][currentY].prevY = currentY; // Save previous Y position
             newBoard[x][currentY] = null;
             currentY++;
           }
           if (currentY < newBoard.length - 1 && newBoard[x][currentY + 1] !== null && newBoard[x][currentY + 1].value === newBoard[x][currentY].value && !newBoard[x][currentY + 1].merged) {
             setScore((prev) => prev + (newBoard[x][currentY + 1].value *= 2))
             newBoard[x][currentY + 1].merged = true;
+            newBoard[x][currentY].prevX = x; // Save previous X position
+            newBoard[x][currentY].prevY = currentY; // Save previous Y position
             newBoard[x][currentY] = null;
           }
         }
@@ -72,12 +80,16 @@ export const maybeMoveTiles = (board, direction, setScore) => {
           let currentX = x;
           while (currentX > 0 && newBoard[currentX - 1][y] === null) {
             newBoard[currentX - 1][y] = newBoard[currentX][y];
+            newBoard[currentX][y].prevX = currentX; // Save previous X position
+            newBoard[currentX][y].prevY = y; // Save previous Y position
             newBoard[currentX][y] = null;
             currentX--;
           }
           if (currentX > 0 && newBoard[currentX - 1][y] !== null && newBoard[currentX - 1][y].value === newBoard[currentX][y].value && !newBoard[currentX - 1][y].merged) {
             setScore((prev) => prev + (newBoard[currentX - 1][y].value *= 2))
             newBoard[currentX - 1][y].merged = true;
+            newBoard[currentX][y].prevX = currentX; // Save previous X position
+            newBoard[currentX][y].prevY = y; // Save previous Y position
             newBoard[currentX][y] = null;
           }
         }
@@ -92,12 +104,16 @@ export const maybeMoveTiles = (board, direction, setScore) => {
           let currentX = x;
           while (currentX < newBoard.length - 1 && newBoard[currentX + 1][y] === null) {
             newBoard[currentX + 1][y] = newBoard[currentX][y];
+            newBoard[currentX][y].prevX = currentX; // Save previous X position
+            newBoard[currentX][y].prevY = y; // Save previous Y position
             newBoard[currentX][y] = null;
             currentX++;
           }
           if (currentX < newBoard.length - 1 && newBoard[currentX + 1][y] !== null && newBoard[currentX + 1][y].value === newBoard[currentX][y].value && !newBoard[currentX + 1][y].merged) {
             setScore((prev) => prev + (newBoard[currentX + 1][y].value *= 2))
             newBoard[currentX + 1][y].merged = true;
+            newBoard[currentX][y].prevX = currentX; // Save previous X position
+            newBoard[currentX][y].prevY = y; // Save previous Y position
             newBoard[currentX][y] = null;
           }
         }

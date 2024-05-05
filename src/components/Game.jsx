@@ -46,6 +46,8 @@ function Game() {
             cell && {
               x,
               y,
+              prevX: cell.prevX,
+              prevY: cell.prevY,
               value: cell.value,
               id: cell.id,
               classes: cell.classes,
@@ -156,6 +158,8 @@ function Game() {
                   <Tile
                     key={tile.id}
                     classes={tile.classes}
+                    prevX={tile.prevX}
+                    prevY={tile.prevY}
                     x={tile.x}
                     y={tile.y}
                     value={tile.value}
